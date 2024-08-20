@@ -6,13 +6,13 @@ import Button from "./Button"
 
 interface EmptyState {
     title?: string
-    subtitile?: string
+    subtitle?: string
     showReset?: boolean
 }
 
 const EmptyState: React.FC<EmptyState> = ({
     title = "No exact matches",
-    subtitile = "Try changing or removing some of your filters",
+    subtitle = "Try changing or removing some of your filters",
     showReset
 }) => {
     const router = useRouter()
@@ -31,7 +31,7 @@ const EmptyState: React.FC<EmptyState> = ({
             <Heading 
                 center
                 title={title}
-                subtitle={subtitile}
+                subtitle={subtitle}
             />
             <div className="w-48 mt-4">
                 {showReset && (

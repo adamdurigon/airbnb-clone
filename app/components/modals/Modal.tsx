@@ -54,7 +54,7 @@ const Modal: React.FC<ModalProps> = ({
     const handleReset = useCallback(() => {
         router.push('/')
         handleClose()
-    }, [])
+    }, [handleClose, router])
 
 
     const handleSubmit = useCallback(() => {

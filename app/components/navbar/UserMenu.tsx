@@ -32,7 +32,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
     
     const handleClose = useCallback(() => {
         setIsOpen(false)
-    }, [isOpen]);
+    }, []);
     
     useClickOutside(userMenuRef, handleClose);
 

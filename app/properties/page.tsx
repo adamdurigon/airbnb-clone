@@ -1,39 +1,40 @@
-import EmptyState from "../components/EmptyState";
-import getCurrentUser from "../actions/getCurrentUser";
+import EmptyState from "@/app/components/EmptyState";
+import getCurrentUser from "@/app/actions/getCurrentUser";
 import PropertiesClient from "./PropertiesClient";
-import getListings from "../actions/getListings";
+import getListings from "@/app/actions/getListings";
+import { Suspense } from "react";
 
 const PropertiesPage = async () => {
-    const currentUser = await getCurrentUser()
+    const currentUser = await getCurrentUser();
 
     if (!currentUser) {
         return (
             <EmptyState 
                 title="Unauthorized"
-                subtitile="Please login"
+                subtitle="Please login"
             />
-        )
+        );
     }
 
-    const listings = await getListings({
-        userId: currentUser.id
-    })
+    const listings = await getListings({ userId: currentUser.id });
 
     if (listings.length === 0) {
         return (
             <EmptyState 
                 title="No properties found"
-                subtitile="Looks like you have no properties."
+                subtitle="Looks like you have no properties."
             />
-        )
+        );
     }
 
     return (
-        <PropertiesClient 
-            listings={listings}
-            currentUser={currentUser}
-        />
-    )
-}
+        <Suspense fallback={<div>Loading...</div>}>
+            <PropertiesClient 
+                listings={listings}
+                currentUser={currentUser}
+            />
+        </Suspense>
+    );
+};
 
-export default PropertiesPage
+export default PropertiesPage;
