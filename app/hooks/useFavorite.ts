@@ -43,7 +43,7 @@ const useFavorite = ({
                 toast.success('Added to favorites')
             } else {
                 request = () => axios.delete(`/api/favorites/${listingId}`)
-                toast.error('Removed from favorites')
+                toast.success('Removed from favorites')
             }
 
             await request()
