@@ -1,11 +1,10 @@
-import EmptyState from "@/app/components/EmptyState";
-import getCurrentUser from "@/app/actions/getCurrentUser";
-import getReservations from "@/app/actions/getReservations";
-import { Suspense } from "react";
+import EmptyState from "../components/EmptyState";
+import getCurrentUser from "../actions/getCurrentUser";
+import getReservations from "../actions/getReservations";
 import TripsClient from "./TripsClient";
 
 const TripsPage = async () => {
-    const currentUser = await getCurrentUser();
+    const currentUser = await getCurrentUser()
 
     if (!currentUser) {
         return (
@@ -13,12 +12,12 @@ const TripsPage = async () => {
                 title="Unauthorized"
                 subtitle="Please login"
             />
-        );
+        )
     }
 
     const reservations = await getReservations({
         userId: currentUser.id
-    });
+    })
 
     if (reservations.length === 0) {
         return (
@@ -26,17 +25,15 @@ const TripsPage = async () => {
                 title="No trips found"
                 subtitle="Looks like you haven't reserved any trips."
             />
-        );
+        )
     }
 
     return (
-        <Suspense fallback={<div>Loading...</div>}>
-            <TripsClient 
-                reservations={reservations}
-                currentUser={currentUser}
-            />
-        </Suspense>
-    );
-};
+        <TripsClient 
+            reservations={reservations}
+            currentUser={currentUser}
+        />
+    )
+}
 
-export default TripsPage;
+export default TripsPage

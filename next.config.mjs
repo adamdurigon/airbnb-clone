@@ -1,5 +1,5 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+// next.config.mjs
+export default {
     images: {
       remotePatterns: [
         {
@@ -16,7 +16,8 @@ const nextConfig = {
         },
       ],
     },
+    experimental: {
+      missingSuspenseWithCSRBailout: false,
+    },
   };
-  
-  export default nextConfig;
   
