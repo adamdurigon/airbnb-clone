@@ -1,58 +1,51 @@
-'use client'
+'use client';
 
+import { useEffect, useMemo } from 'react';
+import useSearchModal from '@/app/hooks/useSearchModal';
+import useReset from '@/app/hooks/useReset'; 
+import { BiSearch } from 'react-icons/bi';
 import useCountries from "@/app/hooks/useCountries";
-import useSearchModal from "@/app/hooks/useSearchModal";
-import { differenceInDays } from "date-fns";
-import { useSearchParams } from "next/navigation";
-import { useMemo } from "react";
-import { BiSearch } from "react-icons/bi";
+import { differenceInDays } from 'date-fns';
 
-const Search = () => {
-    const searchModal = useSearchModal()
-    const params = useSearchParams()
-    const { getByValue } = useCountries()
+const Search: React.FC = () => {
+    const { searchData, onOpen } = useSearchModal();
+    const { getByValue } = useCountries();
 
-    const locationValue = params?.get('locationValue')
-    const startDate = params?.get('startDate')
-    const endDate = params?.get('endDate')
-    const guestCount = params?.get('guestCount')
+    useReset();
 
     const locationLabel = useMemo(() => {
-        if (locationValue) {
-            return getByValue(locationValue as string)?.label
+        if (searchData.locationValue) {
+            const country = getByValue(searchData.locationValue);
+            return country ? country.label : 'Anywhere';
         }
-
-        return 'Anywhere'
-    }, [getByValue, locationValue])
+        return 'Anywhere';
+    }, [getByValue, searchData.locationValue]);
 
     const durationLabel = useMemo(() => {
-        if (startDate && endDate) {
-            const start = new Date(startDate as string)
-            const end = new Date(endDate as string)
-            let diff = differenceInDays(end, start)
+        if (searchData.startDate && searchData.endDate) {
+            const start = new Date(searchData.startDate);
+            const end = new Date(searchData.endDate);
+            let diff = differenceInDays(end, start);
 
             if (diff === 0) {
-                diff = 1
+                diff = 1;
             }
 
-            return `${diff} Days`
+            return `${diff} ${diff === 1 ? 'Day' : 'Days'}`;
         }
-
-        return 'Any Week'
-    }, [startDate, endDate])
+        return 'Any Week';
+    }, [searchData.startDate, searchData.endDate]);
 
     const guestLabel = useMemo(() => {
-        if (guestCount) {
-            return `${guestCount} Guests`
+        if (searchData.guestCount !== undefined && searchData.guestCount !== 0) {
+            return `${searchData.guestCount} ${searchData.guestCount === 1 ? 'Guest' : 'Guests'}`;
         }
+        return 'Add Guests';
+    }, [searchData.guestCount]);
 
-        return 'Add Guests'
-    }, [guestCount])
-
-
-    return ( 
+    return (
         <div
-        onClick={searchModal.onOpen}
+            onClick={onOpen}
             className="
                 border-[1px]
                 w-full
@@ -106,7 +99,7 @@ const Search = () => {
                         flex-row
                         items-center
                         gap-3
-                    "   
+                    "
                 >
                     <div className="hidden sm:block">{guestLabel}</div>
                     <div
@@ -122,7 +115,7 @@ const Search = () => {
                 </div>
             </div>
         </div>
-     );
-}
- 
+    );
+};
+
 export default Search;

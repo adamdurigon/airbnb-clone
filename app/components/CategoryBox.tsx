@@ -1,14 +1,14 @@
 'use client'
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { IconType } from "react-icons";
-import qs from "query-string"
+import qs from "query-string";
 
 interface CategoryBoxProps {
-    icon: IconType
-    label: string
-    selected?: boolean
+    icon: IconType;
+    label: string;
+    selected?: boolean;
 }
 
 const CategoryBox: React.FC<CategoryBoxProps> = ({
@@ -16,34 +16,29 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({
     label,
     selected
 }) => {
-    const router = useRouter()
-    const params = useSearchParams()
+    const router = useRouter();
 
     const handleClick = useCallback(() => {
-        let currentQuery = {}
-
-        if (params) {
-            currentQuery = qs.parse(params.toString())
-        }
-
+        const currentUrl = window.location.href;
+        const currentQuery = qs.parse(window.location.search);
         const updatedQuery: any = {
             ...currentQuery,
             category: label
-        }
+        };
 
-        if (params?.get('category') === label) {
-            delete updatedQuery.category
+        if (currentQuery.category === label) {
+            delete updatedQuery.category;
         }
 
         const url = qs.stringifyUrl({
-            url: '/',
+            url: currentUrl.split('?')[0], // Strip existing query parameters
             query: updatedQuery
-        }, { skipNull: true})
+        }, { skipNull: true });
 
-        router.push(url)
-    },[label, params, router])
+        router.push(url);
+    }, [label, router]);
 
-    return ( 
+    return (
         <div
             onClick={handleClick}
             className={`
@@ -66,7 +61,7 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({
                 {label}
             </div>
         </div>
-     );
+    );
 }
- 
+
 export default CategoryBox;
